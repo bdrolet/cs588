@@ -5,13 +5,27 @@ package main
 
 import "fmt"
 import "os"
+import "strconv"
 
 func main() {
-    k := os.Args[1]
-    n := os.Args[2]
+    k, err := strconv.Atoi(os.Args[1])
+    if err != nil {
+        println("Error converting " + os.Args[1] + " to int.")
+        return
+    }
+    
+    n, err := strconv.Atoi(os.Args[2])
+    if err != nil {
+        println("Error converting " + os.Args[1] + " to int.")
+        return
+    }
     secret := os.Args[3]
     
-    fmt.Println("k: " + k)
-    fmt.Println("n: " + n)
+    shamir(k, n, secret)
+}
+
+func shamir(k int, n int, secret string){
+    fmt.Println("k: " + strconv.Itoa(k))
+    fmt.Println("n: " + strconv.Itoa(n))
     fmt.Println("secret: " + secret)
 }
