@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "log"
 import "strconv"
 import "encoding/binary"
 import "math"
@@ -10,16 +11,19 @@ func createShares(k int, n int, secret string) (shares []string) {
     fmt.Println("n: " + strconv.Itoa(n))
     fmt.Println("secret: " + secret)
 
-    //shares := make(map[][]string, n)
     secretBytes := []byte(secret)
     if len(secretBytes) % 8 != 0{
-	addZeros := 8 - (len(secretBytes) % 8)
-	for i := 0; i < addZeros; i++ {
-		secretBytes = append(secretBytes, 0)
-	}
+        addZeros := 8 - (len(secretBytes) % 8)
+        for i := 0; i < addZeros; i++ {
+            secretBytes = append(secretBytes, 0)
+        }
     }
+    
     sliceShareLength := int(math.Ceil(float64(len(secretBytes))/8))
+    log.Println("slice share length: ", sliceShareLength)
+    
     shareSlices := make([][]byte, sliceShareLength)
+    
     for index := 0; index < sliceShareLength; index++{
 	    shareSlices[index] = make([]byte, 8)
 	    shareSlices[index][0] = secretBytes[index*8]
@@ -31,14 +35,16 @@ func createShares(k int, n int, secret string) (shares []string) {
 	    shareSlices[index][6] = secretBytes[index*8+6]
 	    shareSlices[index][7] = secretBytes[index*8+7]
     }
+    
     shareIntSlices := make([]uint64, sliceShareLength)
+    
     for index := 0; index < sliceShareLength; index++{
-	shareIntSlices[index] = binary.BigEndian.Uint64(shareSlices[index])
-	println(shareIntSlices[index])
+        shareIntSlices[index] = binary.BigEndian.Uint64(shareSlices[index])
+        println(shareIntSlices[index])
     }
 
     for index := 0; index < sliceShareLength; index++{
-	getShareSegments(k,n, shareIntSlices[index])
+        getShareSegments(k,n, shareIntSlices[index])
     }
 
     shares = []string{"1","2"}
