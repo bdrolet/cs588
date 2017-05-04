@@ -1,7 +1,7 @@
 // Shamir's Secret sharing
 // f(x) = a0 + a1x + a2x^2 + ... + a[k-1]x^k-1
 
-package cs588
+package main	
 
 import "os"
 import "strconv"
