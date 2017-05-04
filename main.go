@@ -21,6 +21,18 @@ func main() {
     }
     secret := os.Args[3]
     
+    if n <= 2 {
+        println("n must be greater than 2")
+        return
+    }
+    if k <= 1 {
+        println("k must be greater than 1")
+        return
+    }
+    if n <= k {
+        println("k must be greater than n")
+        return
+    }
     shamir(k, n, secret)
 }
 
