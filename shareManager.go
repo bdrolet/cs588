@@ -1,4 +1,4 @@
-package cs588
+package main
 
 import "fmt"
 import "strconv"
