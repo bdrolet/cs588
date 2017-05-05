@@ -1,10 +1,13 @@
 package main
 
+import "fmt"
+import "encoding/base64"
+import "encoding/hex"
 import "math"
 import "math/rand"
 import "log"
 
-func getShareSegments(n int, k int, secretSegment uint64) (shareSegments []uint64){
+func getShareSegments(k int, n int, secretSegment uint64) (shareSegments []uint64){
     log.Println("In getShareSegments...")
     shareSegments = make([]uint64, n)
     coefficients := getCoeffecients(k)
@@ -38,4 +41,20 @@ func calculateShare(secretSegment uint64, coefficients []int, shareNumber int) (
         log.Println("shareSegment: ", shareSegment)
     }
     return
+}
+
+func toString(number uint64) (share string) {
+    hexData := fmt.Sprintf("%x", number)
+    for index := 0; len(hexData) < 16; index++ {
+        hexData = "0" + hexData
+    }
+    
+    byteData, error := hex.DecodeString(hexData)
+    if error != nil {
+        log.Println(error)
+    }
+    
+    share = base64.URLEncoding.EncodeToString(byteData)
+    log.Println("Converted ", number, " to ", share)
+    return    
 }

@@ -46,6 +46,9 @@ func main() {
         println("k must be greater than n")
         return
     }
-    createShares(k, n, secret)
+    shares := createShares(k, n, secret)
+    for index := 0; index < len(shares); index++ {
+        log.Println("share[", index, "]: ", shares[index])
+    }
 }
 
