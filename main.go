@@ -46,9 +46,20 @@ func main() {
         println("k must be greater than n")
         return
     }
+    
     shares := createShares(k, n, secret)
-    for index := 0; index < len(shares); index++ {
-        log.Println("share[", index, "]: ", shares[index])
-    }
+    writeShare(shares)
 }
-
+    
+func writeShare(shares []string){
+    sharesFile, err := os.OpenFile("shares.txt", os.O_CREATE | os.O_TRUNC, 0666)
+    if err != nil {
+        log.Printf("error opening file: %v", err)
+    }
+    
+    for index := 0; index < len(shares); index++ {
+        sharesFile.WriteString(shares[index] + "\n")
+    }
+    
+    sharesFile.Close()
+}
