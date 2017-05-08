@@ -21,34 +21,38 @@ func main() {
     // assign it to the standard logger
     log.SetOutput(f)
     
-    k, err := strconv.Atoi(os.Args[1])
-    if err != nil {
-        println("Error converting " + os.Args[1] + " to int.")
-        return
+    if os.Args[1] == "create" {        
+        k, err := strconv.Atoi(os.Args[2])
+        if err != nil {
+            println("Error converting " + os.Args[1] + " to int.")
+            return
+        }
+        
+        n, err := strconv.Atoi(os.Args[3])
+        if err != nil {
+            println("Error converting " + os.Args[3] + " to int.")
+            return
+        }
+        secret := os.Args[4]
+        
+        if n <= 2 {
+            println("n must be greater than 2")
+            return
+        }
+        if k <= 1 {
+            println("k must be greater than 1")
+            return
+        }
+        if n <= k {
+            println("k must be greater than n")
+            return
+        }
+        
+        shares := createShares(k, n, secret)
+        writeShare(shares)
+    } else if os.Args[1] == "combine" {
+        
     }
-    
-    n, err := strconv.Atoi(os.Args[2])
-    if err != nil {
-        println("Error converting " + os.Args[1] + " to int.")
-        return
-    }
-    secret := os.Args[3]
-    
-    if n <= 2 {
-        println("n must be greater than 2")
-        return
-    }
-    if k <= 1 {
-        println("k must be greater than 1")
-        return
-    }
-    if n <= k {
-        println("k must be greater than n")
-        return
-    }
-    
-    shares := createShares(k, n, secret)
-    writeShare(shares)
 }
     
 func writeShare(shares []string){
@@ -58,7 +62,9 @@ func writeShare(shares []string){
     }
     
     for index := 0; index < len(shares); index++ {
-        sharesFile.WriteString(shares[index] + "\n")
+        share := fmt.Sprintf("%[1]v, %[2]v\n", (index+1), shares[index])
+        log.Println(share)
+        sharesFile.WriteString(share)
     }
     
     sharesFile.Close()
